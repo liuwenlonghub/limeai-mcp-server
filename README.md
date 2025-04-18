@@ -37,10 +37,9 @@
 
 ## 3. 在Cursor中使用
 
-打开`Cursor`配置（其它客户端类似），在MCP中添加MCP Server
+ `Cursor -> Preferences -> Cursor Settings -> MCP -> Add new global MCP`
 
-在配置文件中添加如下内容后保存
-
+添加以下配置内容（其它MCP客户端类似）：
 ```json
 {
   "mcpServers": {
