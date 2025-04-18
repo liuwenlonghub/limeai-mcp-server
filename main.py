@@ -6,14 +6,14 @@ from typing import Any
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 
-# load_dotenv()
+# 加载环境变量
 load_dotenv()
 
-# Constants
+# 常量
 LIMEAI_API_BASE = "https://web.limeai.net/api"
 LIMEAI_ACCESS_TOKEN = os.getenv('LIMEAI_ACCESS_TOKEN')
 
-# Initialize FastMCP server
+# 初始化 FastMCP 服务器
 mcp = FastMCP("LimeAI-MCP-Server")
 
 # 生成随机字符串
@@ -28,14 +28,14 @@ async def get_user_info() -> Any:
     获取当前用户信息
     """
     try:
-        # Get the access token from environment variables   
+        # 从环境变量获取访问令牌   
         if not LIMEAI_ACCESS_TOKEN:
-            raise Exception("There is no LIMEAI_ACCESS_TOKEN in environment variables")
+            raise Exception("环境变量中没有 LIMEAI_ACCESS_TOKEN")
  
-        # Build the API URL 
+        # 构建 API URL 
         url = f"{LIMEAI_API_BASE}/mcp/user/userinfo"
         
-        # Set the headers for the request
+        # 设置请求头
         headers = {
             "Access-Token": LIMEAI_ACCESS_TOKEN,
             "Content-Type": "application/json"
@@ -48,14 +48,14 @@ async def get_user_info() -> Any:
  
         if result.get("status") != "success":
             error_msg = result.get("message", "unknown error")
-            raise Exception(f"API response error: {error_msg}")
+            raise Exception(f"API 响应错误: {error_msg}")
  
         return result
  
     except httpx.HTTPError as e:
-        raise Exception(f"HTTP request failed: {str(e)}") from e
+        raise Exception(f"HTTP 请求失败: {str(e)}") from e
     except KeyError as e:
-        raise Exception(f"Failed to parse response: {str(e)}") from e
+        raise Exception(f"解析响应失败: {str(e)}") from e
  
 
 @mcp.tool(name="save_markdown", description="保存文本内容（markdown格式）到 LimeAI")
@@ -71,29 +71,29 @@ async def save_markdown(
 
     """
     try:
-        # Get the access token from environment variables   
+        # 从环境变量获取访问令牌   
         if not LIMEAI_ACCESS_TOKEN:
-            raise Exception("There is no LIMEAI_ACCESS_TOKEN in environment variables")
+            raise Exception("环境变量中没有 LIMEAI_ACCESS_TOKEN")
  
-        # Build the API URL 
+        # 构建 API URL 
         url = f"{LIMEAI_API_BASE}/mcp/resource/create-document"
         
-        # Set the headers for the request
+        # 设置请求头
         headers = {
             "Access-Token": LIMEAI_ACCESS_TOKEN,
             "Content-Type": "application/json"
         }
 
-        #  Process file name
+        # 处理文件名
         if file_name:
-            # Check if the file name already contains the .md suffix
+            # 检查文件名是否已包含 .md 后缀
             if not file_name.lower().endswith('.md'):
                 file_name = f"{file_name}.md"
         else:
-            # If no file name is provided, generate a random file name.
+            # 如果没有提供文件名，生成一个随机文件名
             file_name = f"mcp_{generate_string()}.md"
 
-        # Set the data for the request
+        # 设置请求数据
         payload = {
             "content": text_content,
             "file_name": file_name,
@@ -102,7 +102,7 @@ async def save_markdown(
             "file_extension": ".md",
         }
 
-        # Send the request to the API
+        # 向 API 发送请求
         async with httpx.AsyncClient() as client:
             response = await client.post(url, headers=headers, json=payload)
             response.raise_for_status()
@@ -110,14 +110,14 @@ async def save_markdown(
  
         if result.get("status") != "success":
             error_msg = result.get("message", "unknown error")
-            raise Exception(f"API response error: {error_msg}")
+            raise Exception(f"API 响应错误: {error_msg}")
  
         return result
  
     except httpx.HTTPError as e:
-        raise Exception(f"HTTP request failed: {str(e)}") from e
+        raise Exception(f"HTTP 请求失败: {str(e)}") from e
     except KeyError as e:
-        raise Exception(f"Failed to parse response: {str(e)}") from e
+        raise Exception(f"解析响应失败: {str(e)}") from e
     
 
 @mcp.tool(name="save_html", description="保存 html 代码到 LimeAI")
@@ -132,29 +132,30 @@ async def save_html(
 
     """
     try:
-        # Get the access token from environment variables   
+        # 从环境变量获取访问令牌   
         if not LIMEAI_ACCESS_TOKEN:
-            raise Exception("There is no LIMEAI_ACCESS_TOKEN in environment variables")
+            raise Exception("环境变量中没有 LIMEAI_ACCESS_TOKEN")
  
-        # Build the API URL 
+        #
+        # 构建 API URL 
         url = f"{LIMEAI_API_BASE}/mcp/resource/create-document"
         
-        # Set the headers for the request
+        # 设置请求头
         headers = {
             "Access-Token": LIMEAI_ACCESS_TOKEN,
             "Content-Type": "application/json"
         }
 
-        #  Process file name
+        # 处理文件名
         if file_name:
-            # Check if the file name already contains the .html suffix
+            # 检查文件名是否已包含 .html 后缀
             if not file_name.lower().endswith('.html'):
                 file_name = f"{file_name}.html"
         else:
-            # If no file name is provided, generate a random file name.
+            # 如果没有提供文件名，生成一个随机文件名
             file_name = f"mcp_{generate_string()}.html"
 
-        # Set the data for the request
+        # 设置请求数据
         payload = {
             "content": html_content,
             "file_name": file_name,
@@ -163,7 +164,7 @@ async def save_html(
             "file_extension": ".html",
         }
 
-        # Send the request to the API
+        # 向 API 发送请求
         async with httpx.AsyncClient() as client:
             response = await client.post(url, headers=headers, json=payload)
             response.raise_for_status()
@@ -171,16 +172,16 @@ async def save_html(
  
         if result.get("status") != "success":
             error_msg = result.get("message", "unknown error")
-            raise Exception(f"API response error: {error_msg}")
+            raise Exception(f"API 响应错误: {error_msg}")
  
         return result
  
     except httpx.HTTPError as e:
-        raise Exception(f"HTTP request failed: {str(e)}") from e
+        raise Exception(f"HTTP 请求失败: {str(e)}") from e
     except KeyError as e:
-        raise Exception(f"Failed to parse response: {str(e)}") from e
+        raise Exception(f"解析响应失败: {str(e)}") from e
    
 
 if __name__ == "__main__":
-    # Initialize and run the server
+    # 初始化并运行服务器
     mcp.run()
