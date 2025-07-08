@@ -37,7 +37,7 @@ async def get_user_info() -> Any:
         
         # 设置请求头
         headers = {
-            "Access-Token": LIMEAI_ACCESS_TOKEN,
+            "Authorization": f"Bearer {LIMEAI_ACCESS_TOKEN}",
             "Content-Type": "application/json"
         }
  
@@ -80,7 +80,7 @@ async def save_markdown(
         
         # 设置请求头
         headers = {
-            "Access-Token": LIMEAI_ACCESS_TOKEN,
+            "Authorization": f"Bearer {LIMEAI_ACCESS_TOKEN}",
             "Content-Type": "application/json"
         }
 
@@ -142,7 +142,7 @@ async def save_html(
         
         # 设置请求头
         headers = {
-            "Access-Token": LIMEAI_ACCESS_TOKEN,
+            "Authorization": f"Bearer {LIMEAI_ACCESS_TOKEN}",
             "Content-Type": "application/json"
         }
 
